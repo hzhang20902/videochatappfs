@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     width: '400px',
     display: 'flex',
     [theme.breakpoints.down('xs')]: {
-      width: '250px',
+      width: '150px',
     },
   },
   gridContainer: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     [theme.breakpoints.down('xs')]: {
-      flexDirection: 'column',
+      flexDirection: 'row',
     },
   },
   paper: {
@@ -35,12 +35,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VideoPlayer = () => {
-  const { name, callAccepted, myVideo, myAudio, userVideo, userAudio, callEnded, stream, audio, call } = useContext(SocketContext);
+  const { name, callAccepted, myVideo, userVideo, callEnded, stream, call } = useContext(SocketContext);
   const classes = useStyles();
   const [selfMute, setSelfMute] = useState(true);
   const [otherMute, setOtherMute] = useState(true);
-  const [input, setInput] = useState(false);
-  const [in2, setIn2] = useState(false);
 
   
 
@@ -56,25 +54,15 @@ const VideoPlayer = () => {
         <Grid item xs={12} md={6}>
           <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'blue'}}>{name || 'Name'}</Typography>
           <video playsInline muted ref={myVideo} autoPlay className={classes.video} />
-          <audio playsInline muted={input? !audio : audio} ref={audio? myAudio : null} autoPlay />
           <Grid item xs={12} md={6} style={{alignItems: 'center', paddingTop: '3%'}}>
-            <Button 
+            {/* <Button 
             className={!selfMute? null : classes.btnsuccess}
-            startIcon={selfMute? <Speaker fontSize='small'/> : <VolumeOff />} 
+            startIcon={selfMute? <KeyboardVoiceOutlined fontSize='small'/> : <KeyboardVoice />} 
             variant='contained' 
             color={selfMute? 'success' : 'secondary'}
             onClick={() => selfMute? setSelfMute(false) : setSelfMute(true)}>
               {selfMute? 'On' : 'Muted'}
-            </Button>
-
-            <Button 
-            className={!input? null : classes.btnsuccess}
-            startIcon={input? <KeyboardVoiceOutlined fontSize='small'/> : <KeyboardVoice />} 
-            variant='contained' 
-            color={input? 'success' : 'secondary'}
-            onClick={() => input? setInput(false) : setInput(true)}>
-              {input? 'On' : 'Disabled'}
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
       </Paper>
@@ -85,7 +73,6 @@ const VideoPlayer = () => {
         <Grid item xs={12} md={6}>
           <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'red'}}>{call.name || 'Name'}</Typography>
           <video playsInline muted={otherMute} ref={userVideo} autoPlay className={classes.video} />
-          <audio playsInline muted={in2? !audio : audio} ref={audio? userAudio : null} autoPlay />
           <Grid item xs={12} md={6} style={{alignItems: 'center', justifyContent: 'center', paddingTop: '3%'}}>
           <Button 
             className={!otherMute? null : classes.btnsuccess}
@@ -94,16 +81,6 @@ const VideoPlayer = () => {
             color={otherMute? 'success' : 'secondary'}
             onClick={() => otherMute? setOtherMute(false) : setOtherMute(true)}>
               {otherMute? 'On' : 'Muted'}
-            </Button>
-
-
-            <Button 
-            className={!in2? null : classes.btnsuccess}
-            startIcon={in2? <KeyboardVoiceOutlined fontSize='small'/> : <KeyboardVoice />} 
-            variant='contained' 
-            color={in2? 'success' : 'secondary'}
-            onClick={() => in2? setIn2(false) : setIn2(true)}>
-              {in2? 'On' : 'Disabled'}
             </Button>
           </Grid>
         </Grid>
