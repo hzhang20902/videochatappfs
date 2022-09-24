@@ -13,7 +13,8 @@ const SocketContext = createContext()
 const socket = io('https://vidchatappexpress.herokuapp.com/')
 
 const ContextProvider = ({ children }) => {
-    const [stream,setStream] = useState(null);
+    const [stream, setStream] = useState(null);
+    const [audio, setAudio] = useState(null);
     const [me, setMe] = useState('');
     const [call, setCall] = useState({});
     const [callAccepted, setCallAccepted] = useState(false);
@@ -22,18 +23,32 @@ const ContextProvider = ({ children }) => {
     const [name, setName] = useState('');
 
     const myVideo = useRef();
+    const myAudio = useRef();
     const userVideo = useRef();
+    const userAudio = useRef();
     const connectionRef = useRef();
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia( {
-            video: {autoGainControl: true, noiseSuppression: true, suppressLocalAudioPlayback: true, echoCancellation: true}, 
-            audio: {echoCancellation : true, noiseSuppression: true, suppressLocalAudioPlayback: true, autoGainControl: true} } ).then(
+            video: true,
+            audio: true,
+            } ).then(
             (currentStream) => {
                 setStream(currentStream);
 
                 myVideo.current.srcObject = currentStream;
+                
             });
+
+        navigator.mediaDevices.getUserMedia( {
+            audio: true,
+        }).then(
+            (currentAudio) => {
+                setAudio(currentAudio);
+
+                myAudio.current.srcObject = currentAudio;
+            }
+        )
 
         socket.on('me', (id) => setMe(id));
 
@@ -45,7 +60,7 @@ const ContextProvider = ({ children }) => {
     const answerCall = () => {
         setCallAccepted(true)
 
-        const peer = new Peer({ initiator: false, trickle: false, stream });
+        const peer = new Peer({ initiator: false, trickle: false, stream, audio });
 
         peer.on('signal', (data) => {
             socket.emit('answercall', { signal: data, to: call.from });
@@ -53,14 +68,19 @@ const ContextProvider = ({ children }) => {
 
         peer.on('stream', (currentStream) => {
             userVideo.current.srcObject = currentStream;
+        
         });
+
+        peer.on('audio', (currentAudio) => {
+            userAudio.current.srcObject = currentAudio;
+        })
 
         peer.signal(call.signal);
 
         connectionRef.current = peer;
     };
     const callUser = (id) => {
-        const peer = new Peer({ initiator: true, trickle: false, stream });
+        const peer = new Peer({ initiator: true, trickle: false, stream, audio });
 
         peer.on('signal', (data) => {
             socket.emit('calluser', { userToCall: id, signalData: data, from: me, name });
@@ -69,7 +89,12 @@ const ContextProvider = ({ children }) => {
 
         peer.on('stream', (currentStream) => {
             userVideo.current.srcObject = currentStream;
+           
         });
+
+        peer.on('audio', (currentAudio) => {
+            userAudio.current.srcObject = currentAudio;
+        })
 
         socket.on('callaccepted', (signal) => {
             setCallAccepted(true);
@@ -93,8 +118,11 @@ const ContextProvider = ({ children }) => {
             call,
             callAccepted,
             myVideo,
+            myAudio,
             userVideo,
+            userAudio,
             stream,
+            audio,
             name,
             setName,
             callEnded,

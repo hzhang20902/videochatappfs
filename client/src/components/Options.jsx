@@ -64,7 +64,7 @@ const Options = ({ children, props }) => {
   useEffect(() => {
 		const visibilityTimeout = setTimeout(() => {
 			setVisible(false)
-		}, 60000)
+		}, 24000)
 		setVisible(true)
 		return () => {
 			clearTimeout(visibilityTimeout)
@@ -74,7 +74,7 @@ const Options = ({ children, props }) => {
   useEffect(() => {
 		const altVisTime = setInterval(() => {
 			setAltVis(altVis+1)
-		}, 6000)
+		}, 4000)
 		return () => {
 			clearInterval(altVisTime)
 		}
@@ -85,14 +85,11 @@ const Options = ({ children, props }) => {
       <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={!visible}>
         <h1 hidden={altVis===1? !visible : true}>This is Bottle Express!</h1>
         <h2 hidden={altVis===2? !visible : true}>A lightweight, no strings attached video app!</h2>
-        <h2 hidden={altVis===3? !visible : true}>Like a message in a bottle.</h2>
-        <h3 hidden={altVis===4? !visible : true}>Each browser refresh/ended call clears the ID and a new one is generated.</h3>
-        <h3 hidden={altVis===5? !visible : true}>Simply enter your name, press the "Copy Your ID" button below, and send it to your friend.</h3>
-        <h3 hidden={altVis===6? !visible : true}>They can then easily enter your ID to call you!</h3>
-        <h3 hidden={altVis===7? !visible : true}>If they don't call you, or you don't have any friends, you can just call yourself.</h3>
-        <h2 hidden={altVis===8? !visible : true}>No one will know!</h2>
-        <h3 hidden={altVis===9? !visible : true}>You will, though.</h3>
-        <h5 hidden={altVis===10? !visible : true}>And your cat.</h5>
+        <h3 hidden={altVis===3? !visible : true}>Each browser refresh/ended call clears the ID and a new one is generated.</h3>
+        <h3 hidden={altVis===4? !visible : true}>Simply enter your name, press the "Copy Your ID" button below, and send it to a friend.</h3>
+        <h3 hidden={altVis===5? !visible : true}>They can then enter your ID to call you!</h3>
+        <h3 hidden={altVis===6? !visible : true}>Thanks for visiting, and be sure to check out my other projects in the upcoming links:</h3>
+      
       </Paper>
       <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={visible}>
         <Button color='primary' variant='outlined' target={'_blank'} href='https://account.venmo.com/u/figgsboson'>Support My Work!</Button>
