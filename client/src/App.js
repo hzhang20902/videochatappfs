@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         width: '600px',
         border: '2px solid black',
+        backgroundColor: 'lightblue',
 
         [theme.breakpoints.down('xs')]: {
             width: '90%',
@@ -34,7 +35,12 @@ const App = () => {
   return (
     <div className={classes.wrapper}>
         <AppBar className={classes.appBar} position='static' color='inherit'>
-            <Typography variant='h2' align='center'>Vid Chat</Typography>
+            <Typography variant='h2' align='center' style={{
+                fontFamily: 'futura',
+                display: 'flex',
+                margin: '1px 3px',
+                padding: '7px'
+            }}>Bottle Express</Typography>
         </AppBar>
         <VideoPlayer />
         <Options>
