@@ -4,12 +4,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { SocketContext } from '../SocketContext'
 import { KeyboardVoice, VolumeOff } from '@material-ui/icons';
 
+
 const useStyles = makeStyles((theme) => ({
   video: {
-    width: '550px',
+    width: '400px',
     display: 'flex',
     [theme.breakpoints.down('xs')]: {
-      width: '300px',
+      width: '250px',
     },
   },
   gridContainer: {
@@ -54,6 +55,7 @@ const VideoPlayer = () => {
           </Grid>
         </Grid>
       </Paper>
+      
     )}
       {callAccepted && !callEnded && (
       <Paper className={classes.paper}>

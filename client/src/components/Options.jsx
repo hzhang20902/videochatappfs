@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Button, TextField, Grid, Typography, Container, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Assignment, Phone, PhoneDisabled } from '@material-ui/icons'
+import { Assignment, Phone, PhoneDisabled, PhoneInTalk } from '@material-ui/icons'
 import { SocketContext } from '../SocketContext';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     width: '600px',
-    margin: '35px 0',
+    margin: '5px 0',
     padding: 0,
     [theme.breakpoints.down('xs')]: {
       width: '80%'
@@ -27,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     marginTop: 20,
   },
+  btnsuccess: {
+    marginTop: 20,
+    backgroundColor: theme.palette.success.main,
+  },
   padding: {
     padding: 20,
   },
@@ -34,16 +39,66 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px 20px',
     border: '2px solid black',
   },
+  firstpaper:{
+    padding: '10px 20px',
+    border: '2px solid black',
+    fontFamily: 'futura',
+    textAlign: 'center',
+    textShadow: 5,
+  }
 }));
 
-const Options = ({ children }) => {
+const Options = ({ children, props }) => {
   const { me, callAccepted, name, setName, callEnded, leaveCall, callUser } = useContext(SocketContext)
   const [idToCall, setIdToCall] = useState('');
+  const [dial, setDial] = useState(false);
   const classes = useStyles();
+  const calling = () => {
+    callUser(idToCall);
+    dial? setDial(false) : setDial(true);
+  }
+
+  const [visible, setVisible] = useState(false);
+  const [altVis, setAltVis] = useState(1);
+
+  useEffect(() => {
+		const visibilityTimeout = setTimeout(() => {
+			setVisible(false)
+		}, 60000)
+		setVisible(true)
+		return () => {
+			clearTimeout(visibilityTimeout)
+		}
+	}, [])
+
+  useEffect(() => {
+		const altVisTime = setInterval(() => {
+			setAltVis(altVis+1)
+		}, 6000)
+		return () => {
+			clearInterval(altVisTime)
+		}
+	},)
 
   return (
     <Container className={classes.container}>
+      <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={!visible}>
+        <h1 hidden={altVis===1? !visible : true}>This is Bottle Express!</h1>
+        <h2 hidden={altVis===2? !visible : true}>A lightweight, no strings attached video app!</h2>
+        <h2 hidden={altVis===3? !visible : true}>Like a message in a bottle.</h2>
+        <h3 hidden={altVis===4? !visible : true}>Each browser refresh/ended call clears the ID and a new one is generated.</h3>
+        <h3 hidden={altVis===5? !visible : true}>Simply enter your name, press the "Copy Your ID" button below, and send it to your friend.</h3>
+        <h3 hidden={altVis===6? !visible : true}>They can then easily enter your ID to call you!</h3>
+        <h3 hidden={altVis===7? !visible : true}>If they don't call you, or you don't have any friends, you can just call yourself.</h3>
+        <h2 hidden={altVis===8? !visible : true}>No one will know!</h2>
+        <h3 hidden={altVis===9? !visible : true}>You will, though.</h3>
+        <h5 hidden={altVis===10? !visible : true}>And your cat.</h5>
+      </Paper>
+      <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={visible}>
+        <Button color='primary' variant='outlined' target={'_blank'} href='https://account.venmo.com/u/figgsboson'>Support My Work!</Button>
+      </Paper>
       <Paper elevation={10} className={classes.paper} style={{backgroundColor: 'lightblue'}}>
+      <Grid></Grid>
         <form className={classes.root} noValidate autoComplete='off'>
           <Grid container className={classes.gridContainer}>
             <Grid item xs={12} md={6} className={classes.padding}>
@@ -55,6 +110,7 @@ const Options = ({ children }) => {
               fullWidth />
               <CopyToClipboard text={me} className={classes.margin}>
                 <Button 
+                onClick={()=> window.alert('Copied!')}
                 variant='contained' 
                 color='primary' 
                 fullWidth 
@@ -67,7 +123,7 @@ const Options = ({ children }) => {
             <Grid item xs={12} md={6} className={classes.padding}>
               <Typography gutterBottom variant='h6'>Make A Call</Typography>
               <TextField 
-              label='Id To Call' 
+              label='ID To Call' 
               value={idToCall} 
               onChange={(e) => setIdToCall(e.target.value)} 
               fullWidth />
@@ -84,12 +140,12 @@ const Options = ({ children }) => {
               ) : (
                 <Button
                 variant='contained' 
-                color='primary' 
-                startIcon={<Phone fontSize='large' />}
+                color={dial? 'success' : 'primary'}
+                startIcon={dial? <PhoneInTalk fontSize='large' /> : <Phone fontSize='large' />}
                 fullWidth
-                onClick={() => callUser(idToCall)}
-                className={classes.margin}>
-                Make A Call
+                onClick={() => calling()}
+                className={dial? classes.btnsuccess : classes.margin}>
+                {dial? 'Calling...' : 'Make A Call'}
                 </Button>
               )}
             </Grid>
