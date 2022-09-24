@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     width: '400px',
     display: 'flex',
     [theme.breakpoints.down('xs')]: {
-      width: '150px',
+      width: '250px',
     },
   },
   gridContainer: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     [theme.breakpoints.down('xs')]: {
-      flexDirection: 'row',
+      flexDirection: 'column',
     },
   },
   paper: {
@@ -40,47 +40,39 @@ const VideoPlayer = () => {
   const [selfMute, setSelfMute] = useState(true);
   const [otherMute, setOtherMute] = useState(true);
 
-  
-
-  // const audioDev = audio
-
-  // console.log('audio', audio? 'yes' : 'no')
-
-
   return (
     <Grid container className={classes.gridContainer}>
     {stream && (
       <Paper className={classes.paper}>
         <Grid item xs={12} md={6}>
-          <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'blue'}}>{name || 'Name'}</Typography>
-          <video playsInline muted ref={myVideo} autoPlay className={classes.video} />
+          <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'blue'}}>{name || 'Enter Your Name'}</Typography>
+          <video playsInline muted={selfMute} ref={myVideo} autoPlay className={classes.video} />
           <Grid item xs={12} md={6} style={{alignItems: 'center', paddingTop: '3%'}}>
-            {/* <Button 
-            className={!selfMute? null : classes.btnsuccess}
+            <Button 
+            className={selfMute? null : classes.btnsuccess}
             startIcon={selfMute? <KeyboardVoiceOutlined fontSize='small'/> : <KeyboardVoice />} 
             variant='contained' 
-            color={selfMute? 'success' : 'secondary'}
+            color={selfMute? 'secondary' : 'success'}
             onClick={() => selfMute? setSelfMute(false) : setSelfMute(true)}>
-              {selfMute? 'On' : 'Muted'}
-            </Button> */}
+              {selfMute? 'Muted' : 'On'}
+            </Button>
           </Grid>
         </Grid>
       </Paper>
-      
     )}
       {callAccepted && !callEnded && (
       <Paper className={classes.paper}>
         <Grid item xs={12} md={6}>
-          <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'red'}}>{call.name || 'Name'}</Typography>
+          <Typography variant='h5' gutterBottom style={{fontFamily: 'futura', color: 'red'}}>{call.name || 'Enter Your Name'}</Typography>
           <video playsInline muted={otherMute} ref={userVideo} autoPlay className={classes.video} />
           <Grid item xs={12} md={6} style={{alignItems: 'center', justifyContent: 'center', paddingTop: '3%'}}>
           <Button 
-            className={!otherMute? null : classes.btnsuccess}
+            className={otherMute? null : classes.btnsuccess}
             startIcon={otherMute? <Speaker fontSize='small'/> : <VolumeOff />} 
             variant='contained' 
-            color={otherMute? 'success' : 'secondary'}
+            color={otherMute? 'secondary' : 'success'}
             onClick={() => otherMute? setOtherMute(false) : setOtherMute(true)}>
-              {otherMute? 'On' : 'Muted'}
+              {otherMute? 'Muted' : 'On'}
             </Button>
           </Grid>
         </Grid>

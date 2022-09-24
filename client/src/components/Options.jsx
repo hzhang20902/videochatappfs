@@ -32,14 +32,20 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     backgroundColor: theme.palette.success.main,
   },
+  linkbtn:{
+    backgroundColor: theme.palette.success.main,
+  },
   padding: {
     padding: 20,
+    fontFamily: 'futura',
   },
   paper: {
     padding: '10px 20px',
+    fontFamily: 'futura',
     border: '2px solid black',
   },
   firstpaper:{
+    margin: 'auto',
     padding: '10px 20px',
     border: '2px solid black',
     fontFamily: 'futura',
@@ -48,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Options = ({ children, props }) => {
+const Options = ({ children }) => {
   const { me, callAccepted, name, setName, callEnded, leaveCall, callUser } = useContext(SocketContext)
   const [idToCall, setIdToCall] = useState('');
   const [dial, setDial] = useState(false);
@@ -59,43 +65,45 @@ const Options = ({ children, props }) => {
   }
 
   const [visible, setVisible] = useState(false);
-  const [altVis, setAltVis] = useState(1);
 
   useEffect(() => {
 		const visibilityTimeout = setTimeout(() => {
-			setVisible(false)
-		}, 24000)
-		setVisible(true)
+			setVisible(true)
+		}, 16000)
+		setVisible(false)
 		return () => {
 			clearTimeout(visibilityTimeout)
 		}
 	}, [])
 
-  useEffect(() => {
-		const altVisTime = setInterval(() => {
-			setAltVis(altVis+1)
-		}, 4000)
-		return () => {
-			clearInterval(altVisTime)
-		}
-	},)
-
   return (
     <Container className={classes.container}>
-      <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={!visible}>
-        <h1 hidden={altVis===1? !visible : true}>This is Bottle Express!</h1>
-        <h2 hidden={altVis===2? !visible : true}>A lightweight, no strings attached video app!</h2>
-        <h3 hidden={altVis===3? !visible : true}>Each browser refresh/ended call clears the ID and a new one is generated.</h3>
-        <h3 hidden={altVis===4? !visible : true}>Simply enter your name, press the "Copy Your ID" button below, and send it to a friend.</h3>
-        <h3 hidden={altVis===5? !visible : true}>They can then enter your ID to call you!</h3>
-        <h3 hidden={altVis===6? !visible : true}>Thanks for visiting, and be sure to check out my other projects in the upcoming links:</h3>
-      
-      </Paper>
       <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={visible}>
-        <Button color='primary' variant='outlined' target={'_blank'} href='https://account.venmo.com/u/figgsboson'>Support My Work!</Button>
+        <h2 hidden={visible}>A light-weight, no strings attached v-chat:</h2>
+        <h3 hidden={visible}>Each browser refresh/ended call generates a new ID.</h3>
+        <h3 hidden={visible}>Enter a screen name and press "COPY YOUR ID".</h3>
+        <h3 hidden={visible}>Anyone with your current ID can call you!</h3>
+        <h3 hidden={visible}>Thanks for visiting, and be sure to check out my other projects:</h3>
       </Paper>
+   
+      <Paper elevation={10} className={classes.firstpaper} style={{backgroundColor: 'lightblue'}} hidden={!visible}>
+        <Grid container className={classes.gridContainer} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '9%'}}>
+          <Grid item xs={12} md={6} className={classes.padding}>
+            <Button color='secondary' variant='contained' target={'_blank'} href='https://ecommerce-react-hzhang20902.vercel.app/'>Next.Js Webstore</Button>
+          </Grid>
+          <Grid item xs={12} md={6} className={classes.padding}>
+            <Button className={classes.linkbtn} color='success' variant='contained' target={'_blank'} href='https://account.venmo.com/u/figgsboson'>Support My Work!</Button>
+          </Grid>
+          <Grid item xs={12} md={6} className={classes.padding}>
+            <Button color='primary' variant='contained' target={'_blank'} href='https://minecraft3clone-g8o6.vercel.app/'>Minecraft 3js Clone</Button>
+          </Grid>
+          <Grid item xs={12} md={6} className={classes.padding}>
+            <Button className={classes.linkbtn} color='secondary' variant='contained' target={'_blank'} href='https://deploy-react-three-test.herokuapp.com'>React 3D Modeling</Button>
+          </Grid>
+        </Grid>
+      </Paper>
+   
       <Paper elevation={10} className={classes.paper} style={{backgroundColor: 'lightblue'}}>
-      <Grid></Grid>
         <form className={classes.root} noValidate autoComplete='off'>
           <Grid container className={classes.gridContainer}>
             <Grid item xs={12} md={6} className={classes.padding}>
@@ -107,9 +115,9 @@ const Options = ({ children, props }) => {
               fullWidth />
               <CopyToClipboard text={me} className={classes.margin}>
                 <Button 
-                onClick={()=> window.alert('Copied!')}
+                onClick={()=> window.alert('Copied to clipbard.')}
                 variant='contained' 
-                color='primary' 
+                color='primary'
                 fullWidth 
                 startIcon={<Assignment fontSize='large' />}>
                   Copy Your ID
