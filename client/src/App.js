@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import VideoPlayer from './components/VideoPlayer'
 import Options from './components/Options'
 import Notifications from './components/Notifications'
-import { FullscreenExit } from '@material-ui/icons'
+
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
